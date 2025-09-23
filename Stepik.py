@@ -1,0 +1,36 @@
+class ATE:
+    def set_data(self, address: str, number: int, price: float) -> None:
+        self._address = address
+        self._number = number
+        self._price = price
+    def get_address(self) -> str:
+        return self._address
+    def get_number(self) -> int:
+        return self._number
+    def get_price(self) -> float:
+        return self._price
+    def sum_price(self) -> float:
+        return self._number * self._price
+
+print("введите адрес, количество абонентов и абонентскую плату через пробел: ")
+user_input = input().strip()
+parts = user_input.split()
+if len(parts) != 3:
+    raise ValueError("Нужно ввести ровно 3 значения: адрес, число, цена!")
+address = parts[0]
+t_number = parts[1]
+t_price = parts[2]
+try:
+    number = int(t_number)
+except ValueError:
+    print("Ошибка: количество абонентов — не целое число.")
+    raise
+try:
+    price = float(t_price)
+except ValueError:
+    print("Ошибка: абонентская плата — не число с плавающей точкой.")
+    raise
+example = ATE()
+example.set_data(address, number, price)
+result = example.sum_price()
+print(f"\nобщая сумма: {result:.2f} ₽")
