@@ -1,8 +1,18 @@
-﻿#include <iostream>
+﻿#ifndef CLASS_H
+#define CLASS_H
+
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include <stdexcept>
 #include <cmath>
 #include <vector>
+#include <string>
+#include <algorithm>
 #include <limits>
+#include <codecvt>
+#include <Windows.h>
+#include <msclr/marshal_cppstd.h>
 
 class TariffException : public std::invalid_argument {
 public:
@@ -26,6 +36,7 @@ private:
 public:
 	explicit DiscountStrategy(double d);
 	double calculate_price(double price) const override;
+	double get_discount() const;
 };
 
 class Tariff {
@@ -36,6 +47,7 @@ protected:
 public:
 	Tariff(double p, std::string c1, std::string c2);
 	virtual ~Tariff();
+
 	double get_base_price() const;
 	std::string get_city1() const;
 	std::string get_city2() const;
@@ -44,13 +56,11 @@ public:
 class UsualTariff : public Tariff, public NoDiscountStrategy {
 public:
 	UsualTariff(double p, std::string c1, std::string c2);
-	bool is_greater(UsualTariff);
 };
 
 class DiscountTariff : public Tariff, public DiscountStrategy {
 public:
 	DiscountTariff(double p, double discount, std::string c1, std::string c2);
-	bool is_less(DiscountTariff);
 };
 
 class ATE {
@@ -64,6 +74,16 @@ public:
 	ATE& operator += (const UsualTariff& tariff);
 	ATE& operator += (const DiscountTariff& tariff);
 	double calculate_average_price();
-	std::pair<int,int> show_tariff_list() const;
-	void compare(char type, int index1, int index2);
+
+	std::vector<std::string> Split(std::string line, char sep);
+	void SetLists(System::Collections::Generic::List<System::String^>^ tariff_list);
+
+	static int CompareTariffsByPrice(System::String^ x, System::String^ y);
+	static int CompareTariffsByCity1(System::String^ x, System::String^ y);
+	static int CompareTariffsByCity2(System::String^ x, System::String^ y);
+	System::Collections::Generic::List<System::String^>^ SortTariffsByPrice(System::Collections::Generic::List<System::String^>^ tariff_list);
+	System::Collections::Generic::List<System::String^>^ SortTariffsByCity1(System::Collections::Generic::List<System::String^>^ tariff_list);
+	System::Collections::Generic::List<System::String^>^ SortTariffsByCity2(System::Collections::Generic::List<System::String^>^ tariff_list);
 };
+
+#endif
