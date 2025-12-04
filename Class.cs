@@ -191,7 +191,7 @@ public class ATE
             using var command = connection.CreateCommand();
             command.CommandText = @"
                 INSERT INTO Tariffs (City1, City2, Price, Discount, Type)
-                VALUES ($city1, $city2, $price, $discount, 'Usual')";
+                VALUES ($city1, $city2, $price, $discount, 'Discount')";
             command.Parameters.AddWithValue("$city1", tariff.City1);
             command.Parameters.AddWithValue("$city2", tariff.City2);
             command.Parameters.AddWithValue("$price", tariff.Price);
@@ -225,4 +225,5 @@ public class ATE
             }
         }
     }
+
 }
